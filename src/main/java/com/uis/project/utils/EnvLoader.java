@@ -40,13 +40,13 @@ public class EnvLoader {
      * Imprime todas las variables del archivo .env (sin tocar variables de entorno del sistema).
      */
     public void printEnvVars(Set<String> keys) {
-        keys.forEach(key -> System.out.println(key + ": " + dotenv.get(key)));
+        keys.forEach(key -> System.out.println(key + ": " + getValue(key)));
     }
 
     /**
      * Acceso directo a una variable específica.
      */
-    public String get(String key) {
+    public String getValue(String key) {
         return dotenv.get(key);
     }
 

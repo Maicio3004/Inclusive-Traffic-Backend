@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_code", columnList = "code", unique = true)
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +20,11 @@ public class Intersection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String location;
+    @Column(nullable = false, name = "code")
+    private String code;
+    @Column(nullable = false)
     private List<Float> coordinates;
 
     @OneToMany(mappedBy = "intersection")

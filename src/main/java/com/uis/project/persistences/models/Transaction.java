@@ -17,8 +17,14 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)

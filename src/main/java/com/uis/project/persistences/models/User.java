@@ -5,6 +5,9 @@ import lombok.Data;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(indexes = {
+        @Index(name = "idx_email", columnList = "email", unique = true)
+})
 @Data
 public abstract class User {
 
@@ -20,8 +23,10 @@ public abstract class User {
     private String firstLastName;
     @Column(name = "second_last_name")
     private String secondLastName;
-    @Column(unique = true)
+
+    @Column(name = "email", nullable = false)
     private String email;
+
     @Column(nullable = false, length = 355)
     private String password;
     @Column(unique = true, length = 20)

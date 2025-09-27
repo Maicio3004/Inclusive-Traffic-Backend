@@ -1,3 +1,6 @@
+server:
+  port: ${BACKEND_PORT}
+
 spring:
   application:
     name: Inclusive Traffic
@@ -11,3 +14,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+mqtt:
+  broker-url: ${MQTT_BROKER_URL}
+  client-id: ${MQTT_CLIENT_ID}
+  username: ${MQTT_USERNAME}
+  password: ${MQTT_PASSWORD}
+  topics:
+    inbound-topic: ${INBOUND_TOPIC}

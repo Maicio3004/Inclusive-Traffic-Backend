@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(indexes = {
-        @Index(name = "idx_code", columnList = "code", unique = true)
+        @Index(name = "code", columnList = "code", unique = true)
 })
 @Data
 @NoArgsConstructor
@@ -18,14 +18,15 @@ public class Intersection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String location;
     @Column(nullable = false, name = "code")
     private String code;
-    @Column(nullable = false)
-    private List<Float> coordinates;
+
+    @Embedded
+    private Coordinate coordinates;
 
     @OneToMany(mappedBy = "intersection")
     private List<Transaction> transactions;

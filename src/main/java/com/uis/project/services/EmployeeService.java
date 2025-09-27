@@ -22,18 +22,17 @@ public class EmployeeService {
 
         User userSaved = userService.createUser(employeeEntity);
 
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(userSaved.getId());
-        userResponse.setEmail(userSaved.getEmail());
-        userResponse.setType(userSaved.getClass().getSimpleName().toUpperCase());
-
         Map<String, Object> details = new HashMap<>();
         if(userSaved instanceof Employee e) {
             details.put("Position", e.getRole());
         }
-        userResponse.setDetails(details);
-        
-        return userResponse;
+
+        return new UserResponse(
+                userSaved.getId(),
+                userSaved.getEmail(),
+                userSaved.getClass().getSimpleName().toUpperCase(),
+                details
+        );
     }
 
     private Employee builtEmployee(EmployeeRequest employee) {

@@ -1,5 +1,6 @@
 package com.uis.project.exceptions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uis.project.dtos.response.ApiError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApiError> handlerUserNotFound(UserNotFoundException ex) {
+    @ExceptionHandler(value = {
+            UserNotFoundException.class,
+            IntersectionNotFound.class
+    })
+    public ResponseEntity<ApiError> handlerEntityNotFound(EntityNotFoundException ex) {
 
         ApiError error = new ApiError(
                 HttpStatus.NOT_FOUND.value(),

@@ -1,6 +1,8 @@
 package com.uis.project.services;
 
 import com.uis.project.dtos.request.ActivationRequest;
+import com.uis.project.dtos.response.ActivationResponse;
+import com.uis.project.exceptions.IntersectionNotFound;
 import com.uis.project.persistences.models.*;
 import com.uis.project.persistences.models.enums.CardStatus;
 import com.uis.project.persistences.repositories.TransactionRepository;
@@ -27,29 +29,28 @@ public class TransactionService {
 
     public void createTransaction(ActivationRequest activationRequest) {
 
-        Intersection intersection = intersectionService
-                .findByCode(activationRequest.codeIntersection())
-                .orElseThrow(() -> {
-                    LOGGER.error("Invalid Intersection Code: {}", activationRequest.codeIntersection());
-                    return new RuntimeException("Intersection not found");
-                });
+        Intersection intersection = intersectionService.findByCode(activationRequest);
 
-        Optional<Card> optionalCard = cardService
-                .findByRFIDCode(activationRequest.RFIDCode());
+        Optional<Card> optionalCard = cardService.findByRFIDCode(activationRequest);
 
-        Transaction transaction = optionalCard
-                .map(card -> {
-                    if(card.getStatus().equals(CardStatus.ACTIVE)) {
-                        return transactionFactory.createSucessfulTransaction(card.getPatient(), intersection);
-                    } else {
-                        return transactionFactory.createInactiveCardTransaction(card, intersection);
-                    }
-                })
-                .orElseGet(() -> transactionFactory.createCardNotFoundTransaction(intersection));
+        Transaction transaction = transactionFactory.createTransaction(intersection, optionalCard);
 
-        transactionRepository.save(transaction);
+        Transaction transactionSaved = save(transaction);
 
-        LOGGER.info("Transaction created at: {}", transaction.getCreatedAt().toString());
+        mqttPublisher.activateIntersection(ActivationResponse.fromTransaction(transactionSaved));
+
+    }
+
+    public Transaction save(Transaction transaction) {
+        Transaction transactionSaved = transactionRepository.save(transaction);
+
+        if(transactionSaved.isValid()) {
+            LOGGER.info("Transaction created at: {}", transaction.getCreatedAt().toString());
+        } else {
+            LOGGER.warn("Transaction canceled. The traffic light will not be activated");
+        }
+
+        return transactionSaved;
     }
 
 }

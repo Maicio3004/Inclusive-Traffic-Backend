@@ -15,12 +15,14 @@ import java.util.List;
 @Data
 public class Patient extends User {
 
-    @Column(length = 355, nullable = false)
-    private String disability;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "disability_id")
+    private Disability disability;
+
     @Column(length = 355, nullable = false)
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "caregiver_id")
     private Caregiver caregiver;
 

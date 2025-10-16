@@ -2,6 +2,7 @@ package com.uis.project.services;
 
 import com.uis.project.dtos.request.EmployeeRequest;
 import com.uis.project.dtos.response.UserResponse;
+import com.uis.project.mappers.EmployeeMapper;
 import com.uis.project.persistences.models.Employee;
 import com.uis.project.persistences.models.User;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,11 @@ public class EmployeeService {
 
     private final UserService userService;
 
-    public UserResponse createEmployee(EmployeeRequest employee) {
+    public UserResponse createEmployee(EmployeeRequest employeeRequest) {
 
-        Employee employeeEntity = builtEmployee(employee);
+        Employee employee = EmployeeMapper.toEntity(employeeRequest);
 
-        User userSaved = userService.createUser(employeeEntity);
+        User userSaved = userService.createUser(employee);
 
         Map<String, Object> details = new HashMap<>();
         if(userSaved instanceof Employee e) {
@@ -33,20 +34,6 @@ public class EmployeeService {
                 userSaved.getClass().getSimpleName().toUpperCase(),
                 details
         );
-    }
-
-    private Employee builtEmployee(EmployeeRequest employee) {
-        Employee employeeEntity = new Employee();
-        employeeEntity.setRole(employee.getRole());
-
-        employeeEntity.setFirstName(employee.getFirstName());
-        employeeEntity.setSecondLastName(employee.getSecondLastName());
-        employeeEntity.setFirstLastName(employee.getFirstLastName());
-        employeeEntity.setSecondLastName(employee.getSecondLastName());
-        employeeEntity.setEmail(employee.getEmail());
-        employeeEntity.setPassword(employee.getPassword());
-        employeeEntity.setPhone(employee.getPhone());
-        return employeeEntity;
     }
 
 }

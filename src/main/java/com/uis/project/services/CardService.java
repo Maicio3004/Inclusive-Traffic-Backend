@@ -1,5 +1,6 @@
 package com.uis.project.services;
 
+import com.uis.project.dtos.request.ActivationRequest;
 import com.uis.project.persistences.models.Card;
 import com.uis.project.persistences.repositories.CardRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,11 @@ public class CardService {
 
     public Optional<Card> findByRFIDCode(String rfidCode) {
         return cardRepository.findCardByRFIDCode(rfidCode);
+    }
+
+    public Optional<Card> findByRFIDCode(ActivationRequest activationRequest) {
+        String rfidCode = activationRequest.getRFIDCode().toUpperCase();
+        return findByRFIDCode(rfidCode);
     }
 
 }

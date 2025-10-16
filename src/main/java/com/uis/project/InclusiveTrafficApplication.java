@@ -15,7 +15,7 @@ public class InclusiveTrafficApplication {
 
         Set<String> keys = Set.of("DB_HOST", "DB_PORT", "DB_USERNAME", "DB_PASSWORD", "DB_DEFAULT",
                 "BACKEND_PORT", "MQTT_BROKER_URL", "MQTT_CLIENT_ID", "MQTT_USERNAME", "MQTT_PASSWORD",
-                "INBOUND_TOPIC");
+                "INBOUND_TOPIC", "ACTIVATE_TOPIC");
         envLoader.loadSelected(keys);
 
 		SpringApplication.run(InclusiveTrafficApplication.class, args);

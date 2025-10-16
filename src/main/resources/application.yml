@@ -15,6 +15,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
 
+  sql:
+    init:
+      mode: always
+
 mqtt:
   broker-url: ${MQTT_BROKER_URL}
   client-id: ${MQTT_CLIENT_ID}
@@ -22,3 +26,4 @@ mqtt:
   password: ${MQTT_PASSWORD}
   topics:
     inbound-topic: ${INBOUND_TOPIC}
+    activate-topic: ${ACTIVATE_TOPIC}

@@ -1,6 +1,8 @@
 package com.uis.project.dtos.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,10 +12,12 @@ public class UserRequest {
 
     @NotBlank(message = "First name is required")
     private String firstName;
+
     private String secondName;
 
     @NotBlank(message = "First last name is required")
     private String firstLastName;
+
     private String secondLastName;
 
     @Email(message = "Please, provide a valid email address")

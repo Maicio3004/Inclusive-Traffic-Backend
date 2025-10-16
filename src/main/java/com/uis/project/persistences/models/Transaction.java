@@ -34,4 +34,15 @@ public class Transaction {
     @JoinColumn(name = "intersection_id", nullable = false)
     private Intersection intersection;
 
+    /**
+     * <p>
+     *     Verifica que la transacción se haya completado correctamente
+     * </p>
+     * @return {@code true} si la transacción fue exitosa y completada,
+     * de lo contrario {@code false}
+     */
+    public boolean isValid() {
+        return this.getStatus().equals(TransactionStatus.COMPLETED);
+    }
+
 }

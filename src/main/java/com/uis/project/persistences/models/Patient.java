@@ -1,5 +1,6 @@
 package com.uis.project.persistences.models;
 
+import com.uis.project.persistences.models.enums.DisabilityLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,12 +16,18 @@ import java.util.List;
 @Data
 public class Patient extends User {
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "disability_id")
-    private Disability disability;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PatientDisability> disabilities;
 
     @Column(length = 355, nullable = false)
     private String address;
+
+    @Column(length = 355)
+    private String notes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DisabilityLevel severity;
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "caregiver_id")

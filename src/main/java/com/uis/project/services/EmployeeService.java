@@ -30,6 +30,7 @@ public class EmployeeService {
 
         return new UserResponse(
                 userSaved.getId(),
+                userSaved.getFirstName(),
                 userSaved.getEmail(),
                 userSaved.getClass().getSimpleName().toUpperCase(),
                 details

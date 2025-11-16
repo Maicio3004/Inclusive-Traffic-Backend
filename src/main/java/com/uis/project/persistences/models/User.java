@@ -24,7 +24,7 @@ public abstract class User {
     @Column(name = "second_last_name")
     private String secondLastName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(nullable = false, length = 355)

@@ -2,16 +2,18 @@ package com.uis.project.services;
 
 import com.uis.project.dtos.request.ActivationRequest;
 import com.uis.project.dtos.response.ActivationResponse;
-import com.uis.project.exceptions.IntersectionNotFound;
+import com.uis.project.dtos.response.TransactionResponse;
 import com.uis.project.persistences.models.*;
-import com.uis.project.persistences.models.enums.CardStatus;
 import com.uis.project.persistences.repositories.TransactionRepository;
 import com.uis.project.services.mqtt.MqttPublisher;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,8 +27,10 @@ public class TransactionService {
     private final TransactionFactory transactionFactory;
     private final MqttPublisher mqttPublisher;
 
+
     private final static Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
+    @Transactional
     public void createTransaction(ActivationRequest activationRequest) {
 
         Intersection intersection = intersectionService.findByCode(activationRequest);
@@ -38,7 +42,6 @@ public class TransactionService {
         Transaction transactionSaved = save(transaction);
 
         mqttPublisher.activateIntersection(ActivationResponse.fromTransaction(transactionSaved));
-
     }
 
     public Transaction save(Transaction transaction) {
@@ -51,6 +54,13 @@ public class TransactionService {
         }
 
         return transactionSaved;
+    }
+
+    public List<TransactionResponse> findHistory() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        return transactionRepository.findAll(sort).stream()
+                .map(TransactionResponse::fromEntity)
+                .toList();
     }
 
 }

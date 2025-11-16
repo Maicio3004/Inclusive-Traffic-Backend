@@ -41,11 +41,11 @@ public class MqttSubscriber {
                 activationRequest = objectMapper.convertValue(payload, ActivationRequest.class);
             }
 
-            if(activationRequest.getRFIDCode() == null) {
+            if(activationRequest.getRfidCode() == null) {
                 int startIndex = payload.toString().indexOf(":");
                 String newString = payload.toString().substring(startIndex + 2);
                 int endIndex = newString.indexOf('"');
-                activationRequest.setRFIDCode(newString.substring(0, endIndex));
+                activationRequest.setRfidCode(newString.substring(0, endIndex));
             }
 
             mqttService.createTransaction(activationRequest);

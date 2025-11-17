@@ -39,4 +39,8 @@ public class Patient extends User {
     @OneToMany(mappedBy = "patient")
     private List<Transaction> transactions;
 
+    public String getName() {
+        return getFirstName() + " " + getFirstLastName();
+    }
+
 }

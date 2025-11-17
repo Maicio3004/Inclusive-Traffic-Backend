@@ -27,6 +27,8 @@ public class TransactionService {
     private final TransactionFactory transactionFactory;
     private final MqttPublisher mqttPublisher;
 
+    private final SseService sseService;
+
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
@@ -40,6 +42,8 @@ public class TransactionService {
         Transaction transaction = transactionFactory.createTransaction(intersection, optionalCard);
 
         Transaction transactionSaved = save(transaction);
+
+        sseService.sendEvent(TransactionResponse.fromEntity(transactionSaved, optionalCard));
 
         mqttPublisher.activateIntersection(ActivationResponse.fromTransaction(transactionSaved));
     }

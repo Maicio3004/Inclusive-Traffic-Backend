@@ -48,22 +48,14 @@ public class MqttConfig {
     }
 
     /**
-     * Creamos el canal para recibir mensajes
-     */
-    @Bean
-    public MessageChannel inboundChannel(){
-        return new DirectChannel();
-    }
-
-    /**
      * Adapter que se suscribe a uno o varios topico y reenvia a {@code inboundChannel}
      */
     @Bean
-    public MqttPahoMessageDrivenChannelAdapter inboundAdapter(MqttPahoClientFactory factory){
+    public MqttPahoMessageDrivenChannelAdapter inboundAdapter(MqttPahoClientFactory factory, MessageChannel inboundChannel) {
         MqttPahoMessageDrivenChannelAdapter adapter =
                 new MqttPahoMessageDrivenChannelAdapter(clientId + "_in", factory, inboundTopic);
 
-        adapter.setOutputChannel(inboundChannel());
+        adapter.setOutputChannel(inboundChannel);
         return adapter;
     }
 
